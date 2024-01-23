@@ -1,0 +1,5 @@
+- hosts: test-server
+  remote_user: ubuntu
+  become_user: root
+  roles:
+    - base-server

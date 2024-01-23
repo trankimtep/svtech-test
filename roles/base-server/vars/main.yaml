@@ -1,0 +1,2 @@
+sysadmin_home_dir: /home/sysadmin
+hostname_template_file: templates/hostname.j2

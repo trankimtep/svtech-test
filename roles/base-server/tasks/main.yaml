@@ -1,0 +1,12 @@
+- name: add user "Sysadmin"
+  user: 
+    name: sysadmin 
+    home: "{{ sysadmin_home_dir }}" 
+  become: True
+
+- name: change hostname
+  template:
+    src: "{{ hostname_template_file }}"
+    dest: "/etc/hostname"
+  become: True
+
