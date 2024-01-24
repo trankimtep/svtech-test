@@ -6,7 +6,7 @@
 
 - name: change hostname
   template:
-    src: "{{ hostname_template_file }}"
+    src: "{{ hostname_template }}"
     dest: "/etc/hostname"
   become: True
 
@@ -21,4 +21,17 @@
     name: docker.io
     state: present
   become: true
+
+- name: Config Docker
+  template:
+    src: "{{ docker_daemon_template }}"
+    dest: "{{ docker_daemon }}"
+  become: True
+
+- name: Restart Docker service
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  become: true
+
 
