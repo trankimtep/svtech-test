@@ -34,4 +34,16 @@
     state: restarted
   become: true
 
+- name: Network config tuning
+  template:
+    src: "{{ sysctl_config_template }}"
+    dest: "{{ sysctl_config }}"
+  become: True
+
+- name: Reload sysctl
+  ansible.builtin.command:
+    cmd: sysctl -p
+  become: true
+
+
 

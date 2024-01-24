@@ -1,2 +1,7 @@
 sysadmin_home_dir: /home/sysadmin
-hostname_template_file: templates/hostname.j2
+hostname_template: templates/hostname.j2
+docker_daemon_template: templates/docker_daemon.json.j2
+docker_daemon: /etc/docker/daemon.json
+sysctl_config_template: templates/sysctl.conf.j2
+sysctl_config: /etc/sysctl.conf
+
