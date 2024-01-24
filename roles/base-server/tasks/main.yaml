@@ -45,5 +45,27 @@
     cmd: sysctl -p
   become: true
 
+- name: Install auditd
+  ansible.builtin.apt:
+    name: auditd
+    state: present
+  become: true
 
+- name: Backup auditd config
+  ansible.builtin.copy:
+    src: "{{ auditd_config }}"
+    dest: "{{ auditd_config }}.bak"
+    remote_src: yes
+  become: true
 
+- name: Config auditd
+  template:
+    src: "{{ auditd_config_template }}"
+    dest: "{{ auditd_config }}"
+  become: True
+
+- name: Restart auditd service
+  ansible.builtin.service:
+    name: auditd
+    state: restarted
+  become: true

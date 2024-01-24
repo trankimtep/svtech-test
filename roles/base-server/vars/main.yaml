@@ -4,4 +4,6 @@ docker_daemon_template: templates/docker_daemon.json.j2
 docker_daemon: /etc/docker/daemon.json
 sysctl_config_template: templates/sysctl.conf.j2
 sysctl_config: /etc/sysctl.conf
+auditd_config_template: templates/audit.rules.j2
+auditd_config: /etc/audit/rules.d/audit.rules
 
