@@ -10,3 +10,15 @@
     dest: "/etc/hostname"
   become: True
 
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 
+  become: true
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+  become: true
+
