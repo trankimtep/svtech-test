@@ -40,10 +40,12 @@
     - Sửa file /etc/ansible/ansible.cfg, thêm các dòng sau vào khối [defaults]:
 
         inventory      = /path-to-repo/inventory
+
         roles_path    = /path-to-repo/roles    
+        
       Với /path-to-repo/ là đường dẫn trực tiếp đến repository này
     - Chạy playbook với lệnh:
-    
+
         ansible-playbook /path-to-repo/playbook.yaml
 
 
