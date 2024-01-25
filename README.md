@@ -70,4 +70,9 @@
   - Grafana: Truy suất dữ liệu từ victoria metrics và hiển thị trên dasboard. Gửi alert về cho Slack khi được cấu hình.
   - Slack: kênh thông tin với người dùng
  
+3. Các bước xử lý khi nhận thông báo service bị down hoặc chậm
 
+    - Kiểm tra xem có vừa thực hiện thay đổi nào không. Nếu có, roll back lại để cung cấp service trước rồi tìm nguyên nhân sau
+    - Kiểm tra dashboard của hệ thống logs, monitor, tìm kiếm các bất thường
+    - Thực hiện các sửa đổi nhanh (như restart) nếu có thể 
+    - Trao đổi với team để tìm cách giải quyết
