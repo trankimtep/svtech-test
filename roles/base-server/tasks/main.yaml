@@ -13,6 +13,19 @@
     shell: /bin/bash
   become: true
 
+- name: create ssh dir of sysadmin
+  ansible.builtin.file:
+    path: "{{ sysadmin_ssh_dir }}"
+    state: directory
+  become: true
+
+- name: share authorized_keys
+  ansible.builtin.copy:
+    src: "{{ authorized_keys_default_user }}"
+    dest: "{{ sysadmin_ssh_dir }}"
+    remote_src: yes
+  become: true
+
 - name: Disable login for the root user
   ansible.builtin.user:
     name: root
