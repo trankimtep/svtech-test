@@ -5,6 +5,7 @@
 
 1. Viết script để cài đặt base server cho môi trường production
 - Công cụ sử dụng: Ansible
+
 - Các thành phần đã triển khai:
     - Cấu hình timezone về UTC+7
     - User: "sysadmin"
@@ -34,6 +35,16 @@
     - Disable password-based ssh
     - Restart sshd
 
+- Hướng dẫn chạy:
+    - Sửa địa chỉ trong file inventory thành địa chỉ máy chủ phù hợp
+    - Sửa file /etc/ansible/ansible.cfg, thêm các dòng sau vào khối [defaults]:
+        inventory      = /path-to-repo/inventory
+        roles_path    = /path-to-repo/roles    
+      Với /path-to-repo/ là đường dẫn trực tiếp đến repository này
+    - Chạy playbook với lệnh:
+        ansible-playbook /path-to-repo/playbook.yaml
+
+
 2. Hệ thống monitor
 
 - Để  theo dõi mức sử dụng tài nguyên của một tech stack, cần một số thành phần sau:
@@ -53,5 +64,6 @@
   - Promethues: Lấy dữ liệu từ Node exporter và lưu trữ dữ liệu
   - Victoria metrics: Thu thập dữ liệu từ Promethues, lưu trữ. Việc này làm dữ liệu luôn có tính HA, không bị mất nếu Prometheus xảy ra vấn đề.
   - Grafana: Truy suất dữ liệu từ victoria metrics và hiển thị trên dasboard. Gửi alert về cho Slack khi được cấu hình.
+  - Slack: kênh thông tin với người dùng
  
 
