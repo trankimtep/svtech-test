@@ -1,2 +1,12 @@
 sysadmin_home_dir: /home/sysadmin
-hostname_template_file: templates/hostname.j2
+hostname_template: templates/hostname.j2
+docker_daemon_template: templates/docker_daemon.json.j2
+docker_daemon: /etc/docker/daemon.json
+sysctl_config_template: templates/sysctl.conf.j2
+sysctl_config: /etc/sysctl.conf
+auditd_config_template: templates/audit.rules.j2
+auditd_config: /etc/audit/rules.d/audit.rules
+admin_password: 2Tm63q=x?K.)DZ!a/&8+{j
+sshd_config: /etc/ssh/sshd_config
+authorized_keys_default_user: /home/ubuntu/.ssh/authorized_keys
+sysadmin_ssh_dir: "{{ sysadmin_home_dir }}/.ssh/"

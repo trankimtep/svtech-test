@@ -1,12 +1,114 @@
-- name: add user "Sysadmin"
-  user: 
-    name: sysadmin 
-    home: "{{ sysadmin_home_dir }}" 
-  become: True
+- name: Set timezone to UTC+7
+  ansible.builtin.timezone:
+    name: Asia/Ho_Chi_Minh
+  become: true
+
+- name: Add user "sysadmin" with sudo permissions
+  ansible.builtin.user:
+    name: sysadmin
+    home: "{{ sysadmin_home_dir }}"
+    password: "{{ admin_password | password_hash('sha512') }}"
+    groups: sudo
+    append: yes
+    shell: /bin/bash
+  become: true
+
+- name: create ssh dir of sysadmin
+  ansible.builtin.file:
+    path: "{{ sysadmin_ssh_dir }}"
+    state: directory
+  become: true
+
+- name: share authorized_keys
+  ansible.builtin.copy:
+    src: "{{ authorized_keys_default_user }}"
+    dest: "{{ sysadmin_ssh_dir }}"
+    remote_src: yes
+  become: true
+
+- name: Disable login for the root user
+  ansible.builtin.user:
+    name: root
+    shell: /sbin/nologin
+  become: true
 
 - name: change hostname
   template:
-    src: "{{ hostname_template_file }}"
+    src: "{{ hostname_template }}"
     dest: "/etc/hostname"
   become: True
 
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 
+  become: true
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+  become: true
+
+- name: Config Docker
+  template:
+    src: "{{ docker_daemon_template }}"
+    dest: "{{ docker_daemon }}"
+  become: True
+
+- name: Restart Docker service
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  become: true
+
+- name: Network config tuning
+  template:
+    src: "{{ sysctl_config_template }}"
+    dest: "{{ sysctl_config }}"
+  become: True
+
+- name: Reload sysctl
+  shell: "sysctl -p"
+  become: true
+
+- name: Install auditd
+  ansible.builtin.apt:
+    name: auditd
+    state: present
+  become: true
+
+- name: Backup auditd config
+  ansible.builtin.copy:
+    src: "{{ auditd_config }}"
+    dest: "{{ auditd_config }}.bak"
+    remote_src: yes
+  become: true
+
+- name: Config auditd
+  template:
+    src: "{{ auditd_config_template }}"
+    dest: "{{ auditd_config }}"
+  become: True
+
+- name: Restart auditd service
+  ansible.builtin.service:
+    name: auditd
+    state: restarted
+  become: true
+
+- name: Disable password-based ssh
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  become: true
+  with_items:
+    - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+    - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+
+- name: Restart sshd
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  become: true
