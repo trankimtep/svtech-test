@@ -6,15 +6,20 @@
 1. Viết script để cài đặt base server cho môi trường production
 - Công cụ sử dụng: Ansible
 - Các thành phần đã triển khai:
+    - Cấu hình timezone về UTC+7
     - User: "sysadmin"
+    - Cấu hình để chặn login trực tiếp vào user root
     - Hostname: "test-server"
     - Cài đặt docker bằng gói apt docker.io
     - Cấu hình logging driver là json-file và storage driver là overlay2
     - Cấu hình file sysctl.conf để tối ưu mạng
     - Cài đặt và cấu hình auditd để log các command của người dùng
+    - Cấu hình sshd để chặn xác thực bằng mật khẩu
 
 - Các task của ansible:
+    - Set timezone to UTC+7
     - Add user "Sysadmin"
+    - Disable login for the root user
     - Change hostname
     - Update apt cache
     - Install Docker
@@ -26,6 +31,8 @@
     - Backup auditd config
     - Config auditd
     - Restart auditd service
+    - Disable password-based ssh
+    - Restart sshd
 
 2. Hệ thống monitor
 
