@@ -13,6 +13,12 @@
     shell: /bin/bash
   become: true
 
+- name: Disable login for the root user
+  ansible.builtin.user:
+    name: root
+    shell: /sbin/nologin
+  become: true
+
 - name: change hostname
   template:
     src: "{{ hostname_template }}"
