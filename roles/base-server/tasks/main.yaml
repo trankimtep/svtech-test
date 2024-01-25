@@ -1,3 +1,8 @@
+- name: Set timezone to UTC+7
+  ansible.builtin.timezone:
+    name: Asia/Ho_Chi_Minh
+  become: true
+
 - name: Add user "sysadmin" with sudo permissions
   ansible.builtin.user:
     name: sysadmin
@@ -7,7 +12,6 @@
     append: yes
     shell: /bin/bash
   become: true
-
 
 - name: change hostname
   template:
