@@ -6,4 +6,5 @@ sysctl_config_template: templates/sysctl.conf.j2
 sysctl_config: /etc/sysctl.conf
 auditd_config_template: templates/audit.rules.j2
 auditd_config: /etc/audit/rules.d/audit.rules
+admin_password: 2Tm63q=x?K.)DZ!a/&8+{j
 

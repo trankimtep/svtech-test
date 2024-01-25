@@ -1,8 +1,13 @@
-- name: add user "Sysadmin"
-  user: 
-    name: sysadmin 
-    home: "{{ sysadmin_home_dir }}" 
-  become: True
+- name: Add user "sysadmin" with sudo permissions
+  ansible.builtin.user:
+    name: sysadmin
+    home: "{{ sysadmin_home_dir }}"
+    password: "{{ admin_password | password_hash('sha512') }}"
+    groups: sudo
+    append: yes
+    shell: /bin/bash
+  become: true
+
 
 - name: change hostname
   template:
@@ -41,8 +46,7 @@
   become: True
 
 - name: Reload sysctl
-  ansible.builtin.command:
-    cmd: sysctl -p
+  shell: "sysctl -p"
   become: true
 
 - name: Install auditd
