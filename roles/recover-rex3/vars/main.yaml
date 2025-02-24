@@ -1,0 +1,28 @@
+servers:
+  - name: server_06
+    template_path: "server-06-templates"
+    server_status: 0
+    server_number: "06"
+    backend_dir: kakeru-rentalcar-BE
+    frontend_dir: front-end                                             
+
+  - name: server_07
+    template_path: "server-07-templates"
+    server_status: 0
+    server_number: "07"
+    backend_dir: kakeru-rentalcar-BE
+    frontend_dir: front-end    
+
+  - name: server_61
+    template_path: "server-61-templates"
+    server_status: 1
+    server_number: "61"
+    backend_dir: lifeshift-order-backend
+    frontend_dir: lifeshift-order-frontend                                             
+
+  - name: server_62
+    template_path: "server-62-templates"
+    server_status: 0
+    server_number: "07"
+    backend_dir: kakeru-rentalcar-BE
+    frontend_dir: front-end   

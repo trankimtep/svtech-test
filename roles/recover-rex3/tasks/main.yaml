@@ -1,0 +1,15 @@
+- name: Load main variables
+  include_vars: vars/main.yaml
+
+- name: recover
+  include_tasks: roles/recover-rex3/tasks/recover.yaml
+  loop: "{{ servers }}"
+  loop_control:
+    loop_var: server
+  when: target_server is not defined or server.name == target_server
+  vars:
+    server_status: "{{ server.server_status }}"
+    server_number: "{{ server.server_number }}"
+    backend_dir: "{{ server.backend_dir }}"
+    frontend_dir: "{{ server.frontend_dir }}"
+    template_path: "{{ server.template_path }}"

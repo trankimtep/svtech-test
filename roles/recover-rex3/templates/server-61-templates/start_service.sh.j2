@@ -1,0 +1,7 @@
+#!/bin/bash 
+docker run -di --name lifeshift-order-backend-develop  \
+--env-file /var/opt/lifeshift-order-backend/development/.env \
+-v /var/opt/lifeshift-order-backend/development/storage:/rails-app-production/storage \
+--network conaffetto -p 5500:8080 registry.javis.vn/lhd-io-system/lhd-io-be-staging sh ./bin/docker_start.sh
+
+docker run --name lifeshift-order-backend-develop-sidekiq --env-file /var/opt/lifeshift-order-backend/development/.env -d --network conaffetto registry.javis.vn/lhd-io-system/lhd-io-be-staging sh -c "bundle exec sidekiq -C config/sidekiq.yml"

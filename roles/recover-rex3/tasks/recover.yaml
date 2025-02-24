@@ -1,0 +1,90 @@
+
+- name: start server 
+  ansible.builtin.shell: echo y | svps start --server-number "{{ server_number }}"
+  args:
+    executable: /bin/bash
+  register: svps_result
+  when: server_status | int == 1  
+  changed_when: "'started' in svps_result.stdout"
+  ignore_errors: true
+
+- name: stop server 
+  ansible.builtin.shell: echo y | svps stop --server-number "{{ server_number }}"
+  args:
+    executable: /bin/bash
+  register: svps_result
+  when: server_status | int == 0  
+  changed_when: "'started' in svps_result.stdout"
+  ignore_errors: true
+
+# - name: Create backend directories
+#   when: server_status | int == 1
+#   ansible.builtin.file:
+#     path: "/data/servers/{{ server_number }}/server-data/var/opt/{{ item }}"
+#     state: directory
+#     mode: '0755'
+#   loop:
+#     - "{{ backend_dir }}/development"
+#     - "{{ backend_dir }}/development/databases"
+#     - "{{ backend_dir }}/staging"
+#     - "{{ backend_dir }}/staging/databases"
+#     - "{{ frontend_dir }}/development"
+#     - "{{ frontend_dir }}/staging"
+
+# - name: Create empty docker-compose.yml files
+#   when: server_status | int == 1
+#   ansible.builtin.file:
+#     path: "/data/servers/{{ server_number }}/server-data/var/opt/{{ backend_dir }}/{{ item }}"
+#     state: touch
+#     mode: '0644'
+#   loop:
+#     - development/databases/docker-compose.yml
+#     - staging/databases/docker-compose.yml
+
+# - name: Copy docker-compose file
+#   when: server_status | int == 1
+#   template:
+#     src: "templates/{{ template_path }}/docker-compose.yml.j2"
+#     dest: "/data/servers/{{ server_number }}/server-data/var/opt/{{ backend_dir }}/development/databases/docker-compose.yml"
+
+# - name: Copy env file
+#   when: server_status | int == 1
+#   template:
+#     src: "templates/{{ template_path }}/be-env.j2"
+#     dest: "/data/servers/{{ server_number }}/server-data/var/opt/{{ backend_dir }}/development/.env"
+
+- name: Run docker-compose dev 
+  when: server_status | int == 1
+  community.docker.docker_container_exec:
+    container: "server_data_{{ server_number }}"
+    argv:
+      - /bin/bash
+      - "-c"
+      - "docker-compose -f /var/opt/{{ backend_dir }}/development/databases/docker-compose.yml up -d"
+  ignore_errors: true
+
+- name: Run docker-compose stg
+  when: server_status | int == 1
+  community.docker.docker_container_exec:
+    container: "server_data_{{ server_number }}"
+    argv:
+      - /bin/bash
+      - "-c"
+      - "docker-compose -f /var/opt/{{ backend_dir }}/staging/databases/docker-compose.yml up -d"
+  ignore_errors: true
+
+- name: Copy start service script
+  when: server_status | int == 1
+  template:
+    src: "templates/{{ template_path }}/start_service.sh.j2"
+    dest: "/data/servers/{{ server_number }}/server-data/root/start_service.sh"
+
+- name: Start service
+  when: server_status | int == 1
+  community.docker.docker_container_exec:
+    container: "server_data_{{ server_number }}"
+    argv:
+      - /bin/bash
+      - "-c"
+      - "bash /root/start_service.sh"
+  ignore_errors: true

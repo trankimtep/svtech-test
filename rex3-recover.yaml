@@ -1,0 +1,4 @@
+- hosts: rex3
+  remote_user: root
+  roles:
+    - recover-rex3

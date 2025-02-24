@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    container_name: kakeru-rentalcar-pg
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=kakerurentalcar
+      - POSTGRES_PASSWORD=4lVhNdf1U7xsf
+      - POSTGRES_DB=rentalcar
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - kakeru-rentalcar-net
+networks:
+  kakeru-rentalcar-net:
+    name: kakeru-rentalcar
+    external: false
